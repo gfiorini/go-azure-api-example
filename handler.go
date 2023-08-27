@@ -17,7 +17,7 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	listenAddr := ":8080"
+	listenAddr := ":7777"
 	if val, ok := os.LookupEnv("FUNCTIONS_CUSTOMHANDLER_PORT"); ok {
 		listenAddr = ":" + val
 	}
