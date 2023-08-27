@@ -1,4 +1,3 @@
-
 # Azure Functions artifacts
 bin
 obj
@@ -10,3 +9,8 @@ __blobstorage__
 __queuestorage__
 __azurite_db*__.json
 handler*
+*.exe
+
+# JetBrain
+**/.idea/workspace.xml
+**/.idea/tasks.xml
