@@ -19,6 +19,7 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	listenAddr := ":7777"
 	if val, ok := os.LookupEnv("FUNCTIONS_CUSTOMHANDLER_PORT"); ok {
+		// FUNCTIONS_CUSTOMHANDLER_PORT is set by azure func runtime
 		listenAddr = ":" + val
 	}
 	http.HandleFunc("/api/HttpExample", helloHandler)
