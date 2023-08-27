@@ -1,4 +1,3 @@
-rm handler
-rm handler.exe
+ rm -rf ./out/*
 
- GOOS=linux GOARCH=amd64 go build handler.go
+ GOOS=linux GOARCH=amd64 go build -o ./out/handler handler.go
