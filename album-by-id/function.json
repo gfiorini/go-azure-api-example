@@ -4,10 +4,10 @@
       "authLevel": "anonymous",
       "type": "httpTrigger",
       "direction": "in",
+      "route": "albums/{id}",
       "name": "req",
       "methods": [
-        "get",
-        "post"
+        "get"
       ]
     },
     {
