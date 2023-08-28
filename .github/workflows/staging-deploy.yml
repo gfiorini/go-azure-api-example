@@ -27,7 +27,7 @@ jobs:
         go-version: 1.18
 
     - name: Build
-      run: ./build.sh
+      run: chmod +x ./build.sh && ./build.sh
       
     #- name: 'Deploy to Azure'
     #  uses: Azure/functions-action@v1
