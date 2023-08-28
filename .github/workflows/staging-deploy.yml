@@ -1,4 +1,4 @@
-name: staging-deploy
+name: CI/CD
 
 on:
   push:
