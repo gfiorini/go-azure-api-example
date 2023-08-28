@@ -8,6 +8,7 @@ on:
     
 env:
   AZURE_FUNCTIONAPP_NAME: gianapi
+  OUTPUT_FILE: ./out/handler
 
 jobs:
 
@@ -26,11 +27,17 @@ jobs:
       with:
         go-version: 1.18
 
-    - name: Build module
-      run: chmod +x ./build.sh && ./build.sh 
-    
-    - name: Render executable
-      run: chmod +x ./out/handler
+    - name: Build Go handler
+      run: |
+           chmod +x ./build.sh 
+           ./build.sh 
+           chmod +x ${{ env.OUTPUT_FILE }}
+
+    - name: Archive Go handler
+      uses: actions/upload-artifact@v3
+      with:
+          name: handler
+          path: ${{ env.OUTPUT_FILE }}
       
     #- name: 'Deploy to Azure'
     #  uses: Azure/functions-action@v1
