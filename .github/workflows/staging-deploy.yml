@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 env:
-  AZURE_FUNCTIONAPP_NAME: gianapi
+  AZURE_FUNCTIONAPP_NAME: ${{ secrets.FUNCTIONAPP_NAME }} 
   OUTPUT_FILE: ./out/handler
   SLOT_NAME: staging
 
