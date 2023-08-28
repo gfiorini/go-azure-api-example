@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-    
+
 env:
   AZURE_FUNCTIONAPP_NAME: gianapi
   OUTPUT_FILE: ./out/handler
@@ -15,31 +15,31 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    
-    #- name: 'Login via Azure CLI'
-    #  uses: azure/login@v1
-    #  with:
-    #    creds: ${{ secrets.AZURE_RBAC_CREDENTIALS }}
+      - uses: actions/checkout@v3
 
-    - name: 'Set up Go'
-      uses: actions/setup-go@v3
-      with:
-        go-version: 1.18
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_RBAC_CREDENTIALS }}
 
-    - name: Build Go handler
-      run: |
-           chmod +x ./build.sh 
-           ./build.sh 
-           chmod +x ${{ env.OUTPUT_FILE }}
+      - name: 'Set up Go'
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
 
-    - name: Archive Go handler
-      uses: actions/upload-artifact@v3
-      with:
+      - name: Build Go handler
+        run: |
+          chmod +x ./build.sh 
+          ./build.sh 
+          chmod +x ${{ env.OUTPUT_FILE }}
+
+      - name: Archive Go handler
+        uses: actions/upload-artifact@v3
+        with:
           name: handler
           path: ${{ env.OUTPUT_FILE }}
-      
-    #- name: 'Deploy to Azure'
-    #  uses: Azure/functions-action@v1
-    #  with:
-    #    app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+
+      - name: 'Deploy to Azure'
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
