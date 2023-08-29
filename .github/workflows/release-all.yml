@@ -19,6 +19,7 @@ jobs:
             parameters: 'appName=${{ vars.AZURE_FUNCTIONAPP_NAME }}'
             failOnStdErr: false
   deploy-app:
+    needs: build-infrastructure-job
     env:
       OUTPUT_FILE: ./out/handler
       SLOT_NAME: staging
