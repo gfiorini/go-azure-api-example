@@ -1,38 +1,28 @@
-name: CI/CD
-
+name: Deploy Staging App
 on:
-  #push:
-  #  branches: [ "main" ]
   workflow_call:
   workflow_dispatch:  
-
-env:
-  OUTPUT_FILE: ./out/handler
-  SLOT_NAME: staging
-
 jobs:
-
-  build:
+  deploy-app:
+    env:
+      OUTPUT_FILE: ./out/handler
+      SLOT_NAME: staging
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
       - name: 'Login via Azure CLI'
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_RBAC_CREDENTIALS }}
-
       - name: 'Set up Go'
         uses: actions/setup-go@v3
         with:
           go-version: 1.18
-
       - name: Build Go handler
         run: |
           chmod +x ./build.sh 
           ./build.sh 
           chmod +x ${{ env.OUTPUT_FILE }}
-
       - name: 'Deploy to Azure'
         uses: Azure/functions-action@v1
         with:

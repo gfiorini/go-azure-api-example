@@ -23,7 +23,6 @@ param runtime string = 'custom'
 
 var functionAppName = appName
 var hostingPlanName = appName
-var applicationInsightsName = appName
 var storageAccountName = 'stfun${uniqueString(resourceGroup().id)}'
 var slotName = '${functionAppName}-staging'
 var functionWorkerRuntime = runtime
