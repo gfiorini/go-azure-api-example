@@ -38,7 +38,7 @@ http://localhost:7071/api/albums
 set rg_name=rg-board-prod-001
 set subscription_id=b844422f-15e5-4938-bd3c-6d24ea44c7d6
 set location=germanywestcentral
-set function_name=func-board-prod-001
+set function_name=func-board-001
 
 az login 
 az group create -n %rg_name% -l %location%
@@ -52,4 +52,4 @@ AZURE_SUBSCRIPTION=%subscription_id%
 
 # add in gitub the VARIABLE (tab variable -> new repository variable)
 
-AZURE_FUNCTIONAPP_NAME=%rg_name%
+AZURE_FUNCTIONAPP_NAME=%function_name%
