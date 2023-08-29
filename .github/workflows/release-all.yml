@@ -1,9 +1,12 @@
 name: Deploy All
+
 on:
     workflow_dispatch:    
+
 jobs:
     deploy_infrastructure:
         uses: ./.github/workflows/deploy_infrastructure.yml
+        
     deploy_staging_slot:
         needs: deploy_infrastructure
         uses: ./.github/workflows/staging-deploy.yml        
