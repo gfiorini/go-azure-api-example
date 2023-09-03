@@ -1,0 +1,16 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    connectedServiceName: 'rg-api-board-dev-connection'
+    resourceGroupName: rg-api-board-dev
+    csmFile: deploy_infrastructure.bicep
+    overrideParameters: >
+        -appName fn-rg-api-board-dev
+
+
