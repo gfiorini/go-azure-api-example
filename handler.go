@@ -1,73 +1,45 @@
 package main
 
 import (
-	"net/http"
-	"os"
-
+	"context"
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	"leaderboard/config"
+	"leaderboard/model/albums"
+	"leaderboard/scoredb"
+	"log"
 )
+
+var client *mongo.Client
 
 func main() {
 	r := gin.Default()
-	listenAddr := ":9999"
-	if val, ok := os.LookupEnv("FUNCTIONS_CUSTOMHANDLER_PORT"); ok {
-		// FUNCTIONS_CUSTOMHANDLER_PORT is set by azure func runtime
-		listenAddr = ":" + val
-	}
-	r.GET("/api/albums", GetAlbums)
-	r.GET("/api/albums/:id", GetAlbumByID)
-	r.POST("/api/albums", PostAlbums)
-	r.Run(listenAddr) // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
-}
+	cfg, err := loadConfig()
 
-// Album represents data about a record album.
-type Album struct {
-	ID      string  `json:"id"`
-	Title   string  `json:"title"`
-	Artist  string  `json:"artist"`
-	Price   float64 `json:"price"`
-	Summary float64 `json:"summary"`
-}
-
-// albums slice to seed record album data.
-var albums = []Album{
-	{ID: "1", Title: "RED Train", Artist: "John Coltrane", Price: 56.99, Summary: 1000},
-	{ID: "2", Title: "GREEN Train", Artist: "John Coltrane", Price: 56.99, Summary: 1000},
-	{ID: "3", Title: "GREEN Train", Artist: "John Coltrane", Price: 56.99, Summary: 1000},
-}
-
-func GetAlbums(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, albums)
-}
-
-// PostAlbums adds an album from JSON received in the request body.
-func PostAlbums(c *gin.Context) {
-	var newAlbum Album
-
-	// Call BindJSON to bind the received JSON to
-	// newAlbum.
-	if err := c.BindJSON(&newAlbum); err != nil {
-		return
+	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
+	opts := options.Client().ApplyURI(cfg.MongoDbConnection).SetServerAPIOptions(serverAPI)
+	client := scoredb.Connect(err, opts)
+	defer scoredb.Disconnect(err, client)
+	err = client.Ping(context.TODO(), nil)
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	// Add the new album to the slice.
-	albums = append(albums, newAlbum)
-	c.IndentedJSON(http.StatusCreated, newAlbum)
+	listenAddr := ":" + cfg.ServerPort
+	r.GET("/api/albums", albums.GetAlbums)
+	r.GET("/api/albums/:id", albums.GetAlbumByID)
+	r.POST("/api/albums", albums.PostAlbums)
+
+	//r.GET("/api/scores", GetScores)
+	r.Run(listenAddr)
+
 }
 
-// GetAlbumByID locates the album whose ID value matches the id
-// parameter sent by the client, then returns that album as a response.
-func GetAlbumByID(c *gin.Context) {
-	id := c.Param("id")
-
-	// Loop over the list of albums, looking for
-	// an album whose ID value matches the parameter.
-	for _, a := range albums {
-		if a.ID == id {
-			c.IndentedJSON(http.StatusOK, a)
-			return
-		}
+func loadConfig() (config.Config, error) {
+	cfg, err := config.LoadConfig("./config/")
+	if err != nil {
+		log.Fatal("cannot load config:", err)
 	}
-
-	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
+	return cfg, err
 }
