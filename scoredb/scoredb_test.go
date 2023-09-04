@@ -16,7 +16,7 @@ func TestMongoDbConnection(t *testing.T) {
 		log.Fatal("cannot load config:", err)
 	}
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
-	opts := options.Client().ApplyURI(config.MongoDbConnection).SetServerAPIOptions(serverAPI)
+	opts := options.Client().ApplyURI(config.MongoURI).SetServerAPIOptions(serverAPI)
 	client, err := mongo.Connect(context.TODO(), opts)
 	if err != nil {
 		panic(err)

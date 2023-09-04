@@ -3,22 +3,19 @@ package main
 import (
 	"context"
 	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"leaderboard/config"
-	"leaderboard/model/albums"
+	"leaderboard/controllers"
 	"leaderboard/scoredb"
 	"log"
 )
-
-var client *mongo.Client
 
 func main() {
 	r := gin.Default()
 	cfg, err := loadConfig()
 
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
-	opts := options.Client().ApplyURI(cfg.MongoDbConnection).SetServerAPIOptions(serverAPI)
+	opts := options.Client().ApplyURI(cfg.MongoURI).SetServerAPIOptions(serverAPI)
 	client := scoredb.Connect(err, opts)
 	defer scoredb.Disconnect(err, client)
 	err = client.Ping(context.TODO(), nil)
@@ -27,9 +24,9 @@ func main() {
 	}
 
 	listenAddr := ":" + cfg.ServerPort
-	r.GET("/api/albums", albums.GetAlbums)
-	r.GET("/api/albums/:id", albums.GetAlbumByID)
-	r.POST("/api/albums", albums.PostAlbums)
+	r.GET("/api/albums", controllers.GetAlbums(client, cfg))
+	r.GET("/api/albums/:id", controllers.GetAlbumByID(client, cfg))
+	r.POST("/api/albums", controllers.PostAlbum(client, cfg))
 
 	//r.GET("/api/scores", GetScores)
 	r.Run(listenAddr)
