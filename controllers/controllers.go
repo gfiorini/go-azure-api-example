@@ -2,13 +2,15 @@ package controllers
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
+	"io"
 	"leaderboard/config"
 	"leaderboard/model"
 	"log"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func PostAlbum(mongoClient *mongo.Client, cfg config.Config) gin.HandlerFunc {
@@ -83,4 +85,13 @@ func getAlbum(ctx *gin.Context, mongoClient *mongo.Client, cfg config.Config, id
 		return nil, err
 	}
 	return result, err
+}
+
+func Webhook() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		body, _ := io.ReadAll(c.Request.Body)
+		sb := string(body)
+		fmt.Println(sb)
+		fmt.Println(c.Request.URL.Query())
+	}
 }

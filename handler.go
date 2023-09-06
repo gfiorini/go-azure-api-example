@@ -2,12 +2,13 @@ package main
 
 import (
 	"context"
-	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"leaderboard/config"
 	"leaderboard/controllers"
 	"leaderboard/scoredb"
 	"log"
+
+	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func main() {
@@ -24,6 +25,10 @@ func main() {
 	}
 
 	listenAddr := ":" + cfg.ServerPort
+
+	r.GET("/api/webhook", controllers.Webhook())
+	r.POST("/api/webhook", controllers.Webhook())
+
 	r.GET("/api/albums", controllers.GetAlbums(client, cfg))
 	r.GET("/api/albums/:id", controllers.GetAlbumByID(client, cfg))
 	r.POST("/api/albums", controllers.PostAlbum(client, cfg))
