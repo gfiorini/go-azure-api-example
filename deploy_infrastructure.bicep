@@ -1,6 +1,9 @@
 @description('The name of the function app that you wish to create.')
 param appName string
 
+@description('The connection to mongodb')
+param mongouri string
+
 @description('Storage Account type')
 @allowed([
   'Standard_LRS'
@@ -19,6 +22,7 @@ param location string = resourceGroup().location
   'java'
   'custom'
 ])
+
 param runtime string = 'custom'
 
 var functionAppName = appName
@@ -26,6 +30,7 @@ var hostingPlanName = appName
 var storageAccountName = 'stfun${uniqueString(resourceGroup().id)}'
 var slotName = '${functionAppName}-staging'
 var functionWorkerRuntime = runtime
+
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' = {
   name: storageAccountName
@@ -84,6 +89,10 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
           name: 'FUNCTIONS_WORKER_RUNTIME'
           value: functionWorkerRuntime
         }
+        {
+          name: 'MONGOURI'
+          value: mongouri        
+        }             
       ]
       ftpsState: 'FtpsOnly'
       minTlsVersion: '1.2'
@@ -124,8 +133,11 @@ resource slot 'Microsoft.Web/sites/slots@2022-03-01' = {
         {
           name: 'WEBSITE_RUN_FROM_PACKAGE'
           value: '1'
-        }        
-        
+        }   
+        {
+          name: 'MONGOURI'
+          value: mongouri        
+        }     
       ]
     }
   }
