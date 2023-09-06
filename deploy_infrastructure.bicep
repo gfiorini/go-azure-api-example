@@ -47,14 +47,13 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' = {
 
 resource hostingPlan 'Microsoft.Web/serverfarms@2021-03-01' = {
   name: hostingPlanName
-  kind: 'linux'
   location: location
   sku: {
     name: 'Y1'
     tier: 'Dynamic'
   }
   properties: {
-    reserved: true
+    reserved: false //true = linux!!!
   }
 }
 
@@ -92,7 +91,11 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
         {
           name: 'MONGOURI'
           value: mongouri        
-        }             
+        }       
+        {
+          name: 'WEBSITE_RUN_FROM_PACKAGE'
+          value: '1'
+        }
       ]
       ftpsState: 'FtpsOnly'
       minTlsVersion: '1.2'
