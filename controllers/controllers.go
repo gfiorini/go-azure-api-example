@@ -77,14 +77,11 @@ func GetAlbumByID(mongoClient *mongo.Client, cfg config.Config) gin.HandlerFunc 
 	}
 }
 
-func getAlbum(ctx *gin.Context, mongoClient *mongo.Client, cfg config.Config, id string) (bson.D, error) {
+func getAlbum(ctx *gin.Context, mongoClient *mongo.Client, cfg config.Config, id string) (model.Album, error) {
 	coll := mongoClient.Database(cfg.MongoDbScoreDatabase).Collection(cfg.MongoDbAlbumsCollection)
-	var result bson.D
-	err := coll.FindOne(ctx, bson.D{{"id", id}}).Decode(&result)
-	if err != nil {
-		return nil, err
-	}
-	return result, err
+	var album model.Album
+	err := coll.FindOne(ctx, bson.D{{"id", id}}).Decode(&album)
+	return album, err
 }
 
 func Webhook() gin.HandlerFunc {
