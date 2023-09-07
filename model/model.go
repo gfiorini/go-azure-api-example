@@ -7,3 +7,7 @@ type Album struct {
 	Artist string  `json:"artist"`
 	Price  float64 `json:"price"`
 }
+
+type Info struct {
+	Version string `json:"version"`
+}

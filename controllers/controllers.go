@@ -95,3 +95,12 @@ func Webhook() gin.HandlerFunc {
 		fmt.Println(c.Request.URL.Query())
 	}
 }
+
+func Info() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		//todo: recuperare da file di build
+		var info = model.Info{Version: "0.0.1"}
+		//		_ = c.BindJSON(&info)
+		c.IndentedJSON(http.StatusOK, info)
+	}
+}
