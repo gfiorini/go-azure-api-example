@@ -97,7 +97,16 @@ func Info() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		//todo: recuperare da file di build
 		var info = model.Info{Version: "0.0.1"}
-		//		_ = c.BindJSON(&info)
 		c.IndentedJSON(http.StatusOK, info)
+	}
+}
+
+func GetLeaderboard() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		score := model.Score{Name: "Gian", Score: 42}
+		scores := make([]model.Score, 0)
+		scores = append(scores, score)
+		var leaderboard = model.Leaderboard{Scores: scores}
+		c.IndentedJSON(http.StatusOK, leaderboard)
 	}
 }

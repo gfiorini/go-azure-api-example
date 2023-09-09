@@ -28,6 +28,8 @@ func main() {
 
 	r.GET("/api/info", controllers.Info())
 
+	r.GET("/api/leaderboard", controllers.GetLeaderboard())
+
 	r.GET("/api/webhook", controllers.Webhook())
 	r.POST("/api/webhook", controllers.Webhook())
 

@@ -11,3 +11,11 @@ type Album struct {
 type Info struct {
 	Version string `json:"version"`
 }
+
+type Leaderboard struct {
+	Scores []Score `json:"scores"`
+}
+type Score struct {
+	Name  string `json:"name"`
+	Score int    `json:"score"`
+}
