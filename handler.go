@@ -28,17 +28,14 @@ func main() {
 
 	r.GET("/api/info", controllers.Info())
 
-	r.GET("/api/scores", controllers.GetLeaderboard(client, cfg))
+	r.GET("/api/scores/:id", controllers.GetScoreByID(client, cfg))
+	r.GET("/api/scores", controllers.GetScores(client, cfg))
 	r.POST("/api/scores", controllers.PostScore(client, cfg))
+	r.DELETE("/api/scores", controllers.DeleteAllScores(client, cfg)) //non disponibile nelle functions
 
 	r.GET("/api/webhook", controllers.Webhook())
 	r.POST("/api/webhook", controllers.Webhook())
 
-	r.GET("/api/albums", controllers.GetAlbums(client, cfg))
-	r.GET("/api/albums/:id", controllers.GetAlbumByID(client, cfg))
-	r.POST("/api/albums", controllers.PostAlbum(client, cfg))
-
-	//r.GET("/api/scores", GetScores)
 	r.Run(listenAddr)
 
 }

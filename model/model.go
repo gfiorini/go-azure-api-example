@@ -16,7 +16,7 @@ type Info struct {
 	Version string `json:"version"`
 }
 
-type Leaderboard struct {
+type ScoresContainer struct {
 	Scores []Score `json:"scores" bson:"scores"`
 }
 type Score struct {

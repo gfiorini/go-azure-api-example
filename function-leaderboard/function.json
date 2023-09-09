@@ -8,7 +8,7 @@
       "name": "req",
       "route": "leaderboard",
       "methods": [
-        "get"
+        "get,post"
       ]
     },
     {
