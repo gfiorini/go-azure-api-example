@@ -101,12 +101,14 @@ func Info() gin.HandlerFunc {
 	}
 }
 
-func GetLeaderboard() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		score := model.Score{Name: "Gian", Score: 42}
-		scores := make([]model.Score, 0)
-		scores = append(scores, score)
-		var leaderboard = model.Leaderboard{Scores: scores}
-		c.IndentedJSON(http.StatusOK, leaderboard)
+func GetLeaderboard(mongoClient *mongo.Client, cfg config.Config) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		coll := mongoClient.Database(cfg.MongoDbScoreDatabase).Collection(cfg.MongoDbScoresCollection)
+		var scores []model.Score
+		cursor, _ := coll.Find(ctx, bson.M{})
+		cursor.All(ctx, &scores)
+		var leaderboard model.Leaderboard
+		leaderboard.Scores = scores
+		ctx.IndentedJSON(http.StatusOK, leaderboard)
 	}
 }

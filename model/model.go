@@ -1,5 +1,7 @@
 package model
 
+import "go.mongodb.org/mongo-driver/bson/primitive"
+
 // Album represents data about a record album.
 type Album struct {
 	ID     string  `json:"id"`
@@ -16,6 +18,8 @@ type Leaderboard struct {
 	Scores []Score `json:"scores"`
 }
 type Score struct {
-	Name  string `json:"name"`
-	Score int    `json:"score"`
+	Name     string             `json:"name"`
+	Value    int                `json:"value"`
+	PlayerID string             `json:"playerID"`
+	Date     primitive.DateTime `json:"date"`
 }
