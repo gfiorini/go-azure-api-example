@@ -112,3 +112,17 @@ func GetLeaderboard(mongoClient *mongo.Client, cfg config.Config) gin.HandlerFun
 		ctx.IndentedJSON(http.StatusOK, leaderboard)
 	}
 }
+
+func PostScore(mongoClient *mongo.Client, cfg config.Config) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		var score model.Score
+		coll := mongoClient.Database(cfg.MongoDbScoreDatabase).Collection(cfg.MongoDbScoresCollection)
+		if res, err := coll.InsertOne(ctx, &score); err != nil {
+			fmt.Printf("Error: %v", err)
+			ctx.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "generic error"})
+		} else {
+			fmt.Printf("Inserted record with id: %v", res.InsertedID)
+			ctx.IndentedJSON(http.StatusCreated, score)
+		}
+	}
+}

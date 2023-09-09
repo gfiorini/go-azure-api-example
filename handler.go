@@ -28,7 +28,8 @@ func main() {
 
 	r.GET("/api/info", controllers.Info())
 
-	r.GET("/api/leaderboard", controllers.GetLeaderboard(client, cfg))
+	r.GET("/api/scores", controllers.GetLeaderboard(client, cfg))
+	r.POST("/api/scores", controllers.PostScore(client, cfg))
 
 	r.GET("/api/webhook", controllers.Webhook())
 	r.POST("/api/webhook", controllers.Webhook())
